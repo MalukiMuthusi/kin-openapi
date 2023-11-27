@@ -32,9 +32,9 @@ func (x CallbackRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of CallbackRef.
 func (x CallbackRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return json.Marshal(x.Value)
 }
 
@@ -110,9 +110,9 @@ func (x ExampleRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of ExampleRef.
 func (x ExampleRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -188,9 +188,9 @@ func (x HeaderRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of HeaderRef.
 func (x HeaderRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -266,9 +266,9 @@ func (x LinkRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of LinkRef.
 func (x LinkRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -344,9 +344,9 @@ func (x ParameterRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of ParameterRef.
 func (x ParameterRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -422,9 +422,9 @@ func (x RequestBodyRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of RequestBodyRef.
 func (x RequestBodyRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -500,9 +500,9 @@ func (x ResponseRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of ResponseRef.
 func (x ResponseRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -578,9 +578,9 @@ func (x SchemaRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of SchemaRef.
 func (x SchemaRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
@@ -656,9 +656,9 @@ func (x SecuritySchemeRef) MarshalYAML() (interface{}, error) {
 
 // MarshalJSON returns the JSON encoding of SecuritySchemeRef.
 func (x SecuritySchemeRef) MarshalJSON() ([]byte, error) {
-	if ref := x.Ref; ref != "" {
-		return json.Marshal(Ref{Ref: ref})
-	}
+	// if ref := x.Ref; ref != "" {
+	// 	return json.Marshal(Ref{Ref: ref})
+	// }
 	return x.Value.MarshalJSON()
 }
 
