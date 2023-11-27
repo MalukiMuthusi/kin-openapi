@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/MalukiMuthusi/kin-openapi/openapi3"
 )
 
 // CycleError indicates that a type graph has one or more possible cycles.

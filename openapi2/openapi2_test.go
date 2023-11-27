@@ -8,7 +8,7 @@ import (
 
 	"github.com/invopop/yaml"
 
-	"github.com/getkin/kin-openapi/openapi2"
+	"github.com/MalukiMuthusi/kin-openapi/openapi2"
 )
 
 func Example() {

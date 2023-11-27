@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/getkin/kin-openapi/routers"
+	"github.com/MalukiMuthusi/kin-openapi/routers"
 )
 
 // Validator provides HTTP request and response validation middleware.

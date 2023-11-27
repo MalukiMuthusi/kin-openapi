@@ -1,6 +1,6 @@
 package openapi3filter
 
-import "github.com/getkin/kin-openapi/openapi3"
+import "github.com/MalukiMuthusi/kin-openapi/openapi3"
 
 // Options used by ValidateRequest and ValidateResponse
 type Options struct {

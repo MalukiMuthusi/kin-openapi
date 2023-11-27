@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/MalukiMuthusi/kin-openapi/openapi3"
 )
 
 // ValidateResponse is used to validate the given input according to previous

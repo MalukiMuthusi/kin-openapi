@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/getkin/kin-openapi/routers/gorillamux"
+	"github.com/MalukiMuthusi/kin-openapi/openapi3"
+	"github.com/MalukiMuthusi/kin-openapi/routers/gorillamux"
 )
 
 func TestIssue201(t *testing.T) {
