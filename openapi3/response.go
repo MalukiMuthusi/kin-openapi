@@ -4,103 +4,98 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"sort"
 	"strconv"
-
-	"github.com/go-openapi/jsonpointer"
 )
-
-type ResponseBodies map[string]*ResponseRef
-
-var _ jsonpointer.JSONPointable = (*ResponseRef)(nil)
-
-// JSONLookup implements https://pkg.go.dev/github.com/go-openapi/jsonpointer#JSONPointable
-func (m ResponseBodies) JSONLookup(token string) (interface{}, error) {
-	if v, ok := m[token]; !ok || v == nil {
-		return nil, fmt.Errorf("no response body %q", token)
-	} else if ref := v.Ref; ref != "" {
-		return &Ref{Ref: ref}, nil
-	} else {
-		return v.Value, nil
-	}
-}
 
 // Responses is specified by OpenAPI/Swagger 3.0 standard.
 // See https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#responses-object
-type Responses map[string]*ResponseRef
+type Responses struct {
+	Extensions map[string]interface{} `json:"-" yaml:"-"`
 
-var _ jsonpointer.JSONPointable = (*Responses)(nil)
+	m map[string]*ResponseRef
+}
 
-// JSONLookup implements https://pkg.go.dev/github.com/go-openapi/jsonpointer#JSONPointable
-func (responses Responses) JSONLookup(token string) (interface{}, error) {
-	ref, ok := responses[token]
-	if !ok {
-		return nil, fmt.Errorf("invalid token reference: %q", token)
+// NewResponses builds a responses object with response objects in insertion order.
+// Given no arguments, NewResponses returns a valid responses object containing a default match-all reponse.
+func NewResponses(opts ...NewResponsesOption) *Responses {
+	if len(opts) == 0 {
+		return NewResponses(WithName("default", NewResponse().WithDescription("")))
 	}
-
-	if ref != nil && ref.Ref != "" {
-		return &Ref{Ref: ref.Ref}, nil
+	responses := NewResponsesWithCapacity(len(opts))
+	for _, opt := range opts {
+		opt(responses)
 	}
-	return ref.Value, nil
+	return responses
 }
 
-func NewResponses() Responses {
-	r := make(Responses)
-	r["default"] = &ResponseRef{Value: NewResponse().WithDescription("")}
-	return r
+// NewResponsesOption describes options to NewResponses func
+type NewResponsesOption func(*Responses)
+
+// WithStatus adds a status code keyed ResponseRef
+func WithStatus(status int, responseRef *ResponseRef) NewResponsesOption {
+	return func(responses *Responses) {
+		if r := responseRef; r != nil {
+			code := strconv.FormatInt(int64(status), 10)
+			responses.Set(code, r)
+		}
+	}
 }
 
-func (responses Responses) Default() *ResponseRef {
-	return responses["default"]
+// WithName adds a name-keyed Response
+func WithName(name string, response *Response) NewResponsesOption {
+	return func(responses *Responses) {
+		if r := response; r != nil && name != "" {
+			responses.Set(name, &ResponseRef{Value: r})
+		}
+	}
 }
 
-// Get returns a ResponseRef for the given status
+// Default returns the default response
+func (responses *Responses) Default() *ResponseRef {
+	return responses.Value("default")
+}
+
+// Status returns a ResponseRef for the given status
 // If an exact match isn't initially found a patterned field is checked using
 // the first digit to determine the range (eg: 201 to 2XX)
 // See https://spec.openapis.org/oas/v3.0.3#patterned-fields-0
-func (responses Responses) Get(status int) *ResponseRef {
+func (responses *Responses) Status(status int) *ResponseRef {
 	st := strconv.FormatInt(int64(status), 10)
-	if rref, ok := responses[st]; ok {
+	if rref := responses.Value(st); rref != nil {
 		return rref
 	}
-	st = string(st[0]) + "XX"
-	switch st {
-	case "1XX":
-		return responses["1XX"]
-	case "2XX":
-		return responses["2XX"]
-	case "3XX":
-		return responses["3XX"]
-	case "4XX":
-		return responses["4XX"]
-	case "5XX":
-		return responses["5XX"]
-	default:
-		return nil
+	if 99 < status && status < 600 {
+		st = string(st[0]) + "XX"
+		switch st {
+		case "1XX", "2XX", "3XX", "4XX", "5XX":
+			return responses.Value(st)
+		}
 	}
+	return nil
 }
 
 // Validate returns an error if Responses does not comply with the OpenAPI spec.
-func (responses Responses) Validate(ctx context.Context, opts ...ValidationOption) error {
+func (responses *Responses) Validate(ctx context.Context, opts ...ValidationOption) error {
 	ctx = WithValidationOptions(ctx, opts...)
 
-	if len(responses) == 0 {
+	if responses.Len() == 0 {
 		return errors.New("the responses object MUST contain at least one response code")
 	}
 
-	keys := make([]string, 0, len(responses))
-	for key := range responses {
+	keys := make([]string, 0, responses.Len())
+	for key := range responses.Map() {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
 	for _, key := range keys {
-		v := responses[key]
+		v := responses.Value(key)
 		if err := v.Validate(ctx); err != nil {
 			return err
 		}
 	}
-	return nil
+
+	return validateExtensions(ctx, responses.Extensions)
 }
 
 // Response is specified by OpenAPI/Swagger 3.0 standard.

@@ -71,7 +71,7 @@ go run github.com/getkin/kin-openapi/cmd/validate@latest [--circular] [--default
 Use `openapi3.Loader`, which resolves all references:
 ```go
 loader := openapi3.NewLoader()
-doc, err := loader.LoadFromFile("swagger.json")
+doc, err := loader.LoadFromFile("my-openapi-spec.json")
 ```
 
 ## Getting OpenAPI operation that matches request
@@ -137,8 +137,8 @@ func main() {
 
 ## Custom content type for body of HTTP request/response
 
-By default, the library parses a body of HTTP request and response
-if it has one of the next content types: `"text/plain"` or `"application/json"`.
+By default, the library parses a body of the HTTP request and response
+if it has one of the following content types: `"text/plain"` or `"application/json"`.
 To support other content types you must register decoders for them:
 
 ```go
@@ -173,7 +173,7 @@ func xmlBodyDecoder(body io.Reader, h http.Header, schema *openapi3.SchemaRef, e
 
 ## Custom function to check uniqueness of array items
 
-By default, the library check unique items by below predefined function
+By default, the library checks unique items using the following predefined function:
 
 ```go
 func isSliceOfUniqueItems(xs []interface{}) bool {
@@ -187,8 +187,8 @@ func isSliceOfUniqueItems(xs []interface{}) bool {
 }
 ```
 
-In the predefined function using `json.Marshal` to generate a string can
-be used as a map key which is to support check the uniqueness of an array
+In the predefined function `json.Marshal` is used to generate a string that can
+be used as a map key which is to check the uniqueness of an array
 when the array items are objects or arrays. You can register
 you own function according to your input data to get better performance:
 
@@ -275,7 +275,15 @@ func safeErrorMessage(err *openapi3.SchemaError) string {
 
 This will change the schema validation errors to return only the `Reason` field, which is guaranteed to not include the original value.
 
-## CHANGELOG: Sub-v0 breaking API changes
+## CHANGELOG: Sub-v1 breaking API changes
+
+### v0.122.0
+* `Paths` field of `openapi3.T` is now a pointer
+* `Responses` field of `openapi3.Operation` is now a pointer
+* `openapi3.Paths` went from `map[string]*PathItem` to a struct with an `Extensions` field and methods: `Set`, `Value`, `Len`, `Map`, and `New*`.
+* `openapi3.Callback` went from `map[string]*PathItem` to a struct with an `Extensions` field and methods: `Set`, `Value`, `Len`, `Map`, and `New*`.
+* `openapi3.Responses` went from `map[string]*ResponseRef` to a struct with an `Extensions` field and methods: `Set`, `Value`, `Len`, `Map`, and `New*`.
+* `(openapi3.Responses).Get(int)` renamed to `(*openapi3.Responses).Status(int)`
 
 ### v0.121.0
 * Introduce `openapi3.RequestBodies` (an alias on `map[string]*openapi3.ResponseRef`) and use it in place of `openapi3.Responses` for field `openapi3.Components.Responses`.

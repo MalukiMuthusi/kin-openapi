@@ -216,12 +216,15 @@ components:
         - type: integer
           format: int32
 `[1:])
+
 	loader := NewLoader()
 	doc, err := loader.LoadFromData(spec)
 	require.NoError(t, err)
 	require.NotNil(t, doc)
+
 	err = doc.Validate(loader.Context)
 	require.NoError(t, err)
+
 	var ptr jsonpointer.Pointer
 	var v interface{}
 	var kind reflect.Kind
@@ -230,13 +233,15 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
-	require.IsType(t, Paths{}, v)
-	require.Equal(t, reflect.TypeOf(Paths{}).Kind(), kind)
+	require.NotNil(t, v)
+	require.IsType(t, &Paths{}, v)
+	require.Equal(t, reflect.TypeOf(&Paths{}).Kind(), kind)
 
 	ptr, err = jsonpointer.New("/paths/~1pet")
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &PathItem{}, v)
 	require.Equal(t, reflect.TypeOf(&PathItem{}).Kind(), kind)
 
@@ -244,6 +249,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Operation{}, v)
 	require.Equal(t, reflect.TypeOf(&Operation{}).Kind(), kind)
 
@@ -251,13 +257,15 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
-	require.IsType(t, Responses{}, v)
-	require.Equal(t, reflect.TypeOf(Responses{}).Kind(), kind)
+	require.NotNil(t, v)
+	require.IsType(t, &Responses{}, v)
+	require.Equal(t, reflect.TypeOf(&Responses{}).Kind(), kind)
 
 	ptr, err = jsonpointer.New("/paths/~1pet/put/responses/200")
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Response{}, v)
 	require.Equal(t, reflect.TypeOf(&Response{}).Kind(), kind)
 
@@ -265,6 +273,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, Content{}, v)
 	require.Equal(t, reflect.TypeOf(Content{}).Kind(), kind)
 
@@ -272,6 +281,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Ref{}, v)
 	require.Equal(t, reflect.Ptr, kind)
 	require.Equal(t, "#/components/schemas/Pet", v.(*Ref).Ref)
@@ -280,6 +290,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Ref{}, v)
 	require.Equal(t, reflect.Ptr, kind)
 	require.Equal(t, "#/components/schemas/Pet", v.(*Ref).Ref)
@@ -288,6 +299,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Schema{}, v)
 	require.Equal(t, reflect.Ptr, kind)
 	require.Equal(t, "integer", v.(*Schema).Type)
@@ -296,6 +308,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Schema{}, v)
 	require.Equal(t, reflect.Ptr, kind)
 	require.Equal(t, "string", v.(*Schema).Type)
@@ -304,6 +317,7 @@ components:
 	require.NoError(t, err)
 	v, kind, err = ptr.Get(doc)
 	require.NoError(t, err)
+	require.NotNil(t, v)
 	require.IsType(t, &Schema{}, v)
 	require.Equal(t, reflect.Ptr, kind)
 	require.Equal(t, "integer", v.(*Schema).Type)
